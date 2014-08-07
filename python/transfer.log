@@ -1,0 +1,44 @@
+Starting script at 03/07/2013 09:41:01
+Backup helloworld to bing@pople.psc.sc.edu:/home/bing/backup/
+Ending script at 03/07/2013 09:41:16
+Time to run script: 14.790744066238403 seconds
+********************************
+
+********************************
+Starting script at 03/07/2013 09:43:16
+Backup helloworld to bing@pople.psc.sc.edu:/home/bing/
+Ending script at 03/07/2013 09:43:27
+Time to run script: 11.431275129318237 seconds
+********************************
+
+********************************
+Starting script at 03/07/2013 12:50:21
+Backup H2O.txt to bing@pople.psc.sc.edu:/home/bing/
+Ending script at 03/07/2013 12:50:31
+Time to run script: 10.467940092086792 seconds
+********************************
+
+********************************
+Starting script at 03/07/2013 13:29:59
+Starting script at 03/07/2013 13:33:14
+Backup helloworld to bing@al.chem.sc.edu:/home/bing/
+Ending script at 03/07/2013 13:33:37
+Time to run script: 23.18386197090149 seconds
+********************************
+
+********************************
+Starting script at 03/07/2013 13:38:20
+Backup QCHEM to bing@al.chem.sc.edu:/home/bing/
+Ending script at 03/07/2013 13:38:30
+Time to run script: 9.721756935119629 seconds
+*************The End.*******************
+Starting script at 03/12/2013 16:59:36
+Backup H3PL_vib.qcin to bing@pople.psc.sc.edu:/home/bing/
+Ending script at 03/12/2013 17:00:14
+Time to run script: 37.75673007965088 seconds
+*************The End.*******************
+Starting script at 03/14/2013 16:39:14
+Backup manu.tex to bing@al.chem.sc.edu:/home/bing/
+Ending script at 03/14/2013 16:39:21
+Time to run script: 6.65050196647644 seconds
+*************The End.*******************

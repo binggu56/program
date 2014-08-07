@@ -1,0 +1,45 @@
+#!/usr/bin/python
+# Filename: backup_v4
+import time,os,sys
+
+def check(dir):
+	"check if the file exist."
+	if not os.path.exists(dir):
+		sys.exit('The file does not exist.')
+	else:
+		print("%s will be backuped." %(dir))
+
+def sync(source,target_dir):
+#	target_dir = '/home/bing/backup/' 
+#	target=target_dir+time.strftime('%Y%m%d') + '.tar.gz'
+	command='rsync -r -v --partial --max-size=100m %s %s' %(source,target_dir)
+	if os.system(command) == 0:
+		print('Successful backup to ',target_dir)
+	else:
+		print('Backup failed.')
+
+
+while True:
+	try:
+		dest=int(input('Where to backup: 1) POPLE 2) Dropbox\n'))
+		break
+	except ValueError:
+		print("Oops!  That was no valid number.  Try again...")
+
+
+if dest==1:
+	target_dir='bing@pople.psc.sc.edu:/home/bing/backup/'
+else:
+	target_dir='/Users/bing/Dropbox/backup/'
+		
+if len(sys.argv) < 2:
+	src = input("Enter the name of file or directory you want to backup:")
+	check(src)
+	sync(src,target_dir)
+else:
+	for arg in sys.argv[1:]:
+		check(arg)
+		sync(arg,target_dir)
+#source = sys.argv[1]
+
+# If you are using Windows, use source = [r'C:\Documents', r'D:\Work'] or something like that

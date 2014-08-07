@@ -1,0 +1,26 @@
+pYadis 0.1
+==========
+
+An automatic backup utility.
+
+Author: James Crickmere
+Email: james.crickmere@googlemail.com
+Copyright: See 'COPYING' file.
+URL: http://pyadis.googlecode.com/
+
+Installing
+----------
+
+1. Extract pYadis-<version>.tar.gz.
+2. Open a shell and cd to the pYadis-<version> folder.
+3. Run: sudo python setup.py install
+4. Run `pyadis-config` to configure the programme.
+5. Schedule the command `pyadis-deamon` to start automatically on user login, or
+   use crontab or similar to schedule the command `pyadis-deamon once` to run
+   as frequently as you want new and updated files to be backed up.
+
+Uninstalling
+------------
+
+Run: python setup.py uninstall
+

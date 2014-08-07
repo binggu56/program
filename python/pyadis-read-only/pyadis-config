@@ -1,0 +1,180 @@
+#!/usr/bin/env python
+
+# Copyright 2009 James Crickmere <james.crickmere@googlemail.com>
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+
+"""
+    GUI Configuration - displays a configuration dialog box allowing the
+    user to change the settings stored in .pyadis-config.
+    
+    The file .pyadis-config is automatically created if it does not exist,
+    and populated with the default settings defined in 'DEFAULTS'.
+"""
+
+import os, gtk, pango, cPickle
+import lib_pyadis
+
+
+class Application:
+    """Contains all the GTK widgets and methods to interact with the settings
+    file,
+    """
+    
+    def __init__(self):
+        """Creates and positions all the GTK widgets, and calles the
+        'insert_defaults' and 'add_handlers' methods.
+        """
+        
+        self.window = gtk.Window()
+        self.window.connect("destroy", self.exit)
+        self.window.set_title("pYadis Configuration")
+        self.window.set_border_width(10)
+        self.table = gtk.Table(5, 2)
+        
+        self.table.set_row_spacing(1, 10)
+        self.table.set_row_spacing(2, 10)
+        self.table.set_row_spacing(3, 10)
+        self.table.set_row_spacing(4, 10)
+        self.table.set_col_spacing(1, 10)
+        
+        self.label1 = gtk.Label("Folder(s) to backup")
+        self.label1.set_alignment(0, 1)
+        self.entry1 = gtk.Entry()
+        self.label2 = gtk.Label("Separate with semi-colons ';'.")
+        font = pango.FontDescription("9")
+        self.label2.modify_font(font)
+        self.label3 = gtk.Label("Backup location")
+        self.label3.set_alignment(0, 1)
+        self.entry2 = gtk.Entry()
+        self.label4 = gtk.Label("Scan for changes every (minutes)")
+        self.label4.set_alignment(0, 1)
+        adjustment = gtk.Adjustment(15, 1, 60, 1)
+        self.hbox1 = gtk.HBox()
+        self.spin1 = gtk.SpinButton(adjustment)
+        self.spin1.set_width_chars(4)
+        
+        self.hbox2 = gtk.HBox()
+        
+        self.button1 = gtk.Button("Cancel")
+        self.button2 = gtk.Button("Save")
+        
+        
+        self.window.add(self.table)
+        self.table.attach(self.label1, 0, 1, 0, 1)
+        self.table.attach(self.entry1, 1, 2, 0, 1)
+        self.table.attach(self.label2, 1, 2, 1, 2)
+        self.table.attach(self.label3, 0, 1, 2, 3)
+        self.table.attach(self.entry2, 1, 2, 2, 3)
+        self.table.attach(self.label4, 0, 1, 3, 4)
+        self.table.attach(self.hbox1, 1, 2, 3, 4)
+        self.hbox1.pack_start(self.spin1)
+        self.table.attach(self.hbox2, 0, 2, 4, 5)
+        self.hbox2.pack_end(self.button1)
+        self.hbox2.pack_end(self.button2)
+        
+        self.window.show()
+        self.table.show()
+        self.label1.show()
+        self.entry1.show()
+        self.label2.show()
+        self.label3.show()
+        self.entry2.show()
+        self.label4.show()
+        self.hbox1.show()
+        self.spin1.show()
+        self.hbox2.show()
+        self.button1.show()
+        self.button2.show()
+        
+        self.insert_defaults()
+        self.add_handlers()
+    
+    
+    def insert_defaults(self):
+        """Grabs the settings from the settings file at 'SETTINGS' and inserts
+        them into the appropriate GTK widgets.
+        
+        If the settings file cannot be found, this method creates it using the
+        'DEFAULT' values.
+        """
+        
+        self.settings = lib_pyadis.get_settings()
+        
+        self.entry1.set_text(';'.join(self.settings['backup_dirs']))
+        self.entry2.set_text(self.settings['backup_to'])
+        self.spin1.set_value(self.settings['scan'])
+    
+    
+    def add_handlers(self):
+        """Connect the buttons to callback methods."""
+        self.button1.connect("clicked", self.exit)
+        self.button2.connect("clicked", self.save_and_exit)
+    
+    
+    def save_and_exit(self, widget=None, data=None):
+        """Callback method: validates the values, updates the settings files with
+        them and quits.
+        """
+        
+        backup_dirs = self.entry1.get_text().split(';')
+        backup_to = self.entry2.get_text()
+        scan = self.spin1.get_value()
+        
+        # Validation.
+        i = 0
+        for directory in backup_dirs:
+            if os.path.isdir(directory) == False:
+                self.errorbox("The folder '%s' does not exist." % directory)
+                return False
+            
+            # Strip trailing slashes.
+            if directory[-1] == '/':
+                backup_dirs[i] = directory[:-1]
+            
+            i += 1
+        
+        if backup_to == '':
+            self.errorbox("The backup loction cannot be blank.")
+            return False
+        
+        # Strip trailing slash.
+        if backup_to[-1] == '/':
+            backup_to = backup_to[:-1]
+        
+        self.settings['backup_dirs'] = backup_dirs
+        self.settings['backup_to'] = backup_to
+        self.settings['scan'] = scan
+        
+        lib_pyadis.save_settings(self.settings)
+        self.exit()
+    
+    
+    def exit(self, widget=None, data=None):
+        """Quits."""
+        gtk.main_quit()
+    
+    
+    def errorbox(self, message):
+        """Displays an error dialogue box with the 'message' and a single 'OK' button, which closes
+        the box.
+        """
+        
+        box = gtk.MessageDialog(self.window, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, message)
+        box.connect('response', lambda a, b: box.hide())
+        box.run()
+    
+    
+    def run(self):
+        """Runs the GTK main() loop."""
+        gtk.main()
+
+
+# If this script is run directly, run the app.
+if __name__ == "__main__":
+    app = Application()
+    app.run()

@@ -1,0 +1,75 @@
+#!/usr/bin/python
+# Filename: transfer
+import time,os,sys
+
+def check(dir):
+	"check if the file exist."
+	if not os.path.exists(dir):
+		sys.exit('The file does not exist.')
+	else:
+		print("%s will be backuped." %(dir))
+
+def sync(source,target_dir):
+#	target_dir = '/home/bing/backup/' 
+#	target=target_dir+time.strftime('%Y%m%d') + '.tar.gz'
+	log.write("Backup %s to %s\n" %(source,target_dir))
+	command='rsync -r -v --partial --max-size=100m %s %s' %(source,target_dir)
+	if os.system(command) == 0:
+		print('Successful backup to ',target_dir)
+	else:
+		print('Backup failed.')
+
+##
+# Configuration variables
+##
+
+# Local
+script_dir = '/Users/bing/Python' # Dir of script
+
+# Remote
+remote_host = ['pople.psc.sc.edu','al.chem.sc.edu']
+remote_user = 'bing'
+remote_dir = '/home/'+remote_user
+
+# what to do 
+send_alert = False # send emails alert of backup when it finished
+
+# Start log file
+
+log_path = "%s/transfer.log" %(script_dir)
+log = open(log_path,'a')
+log.write(
+	"Starting script at %s\n" % time.strftime("%m/%d/%Y %H:%M:%S")
+	)
+t1 = time.time()
+
+while True:
+	try:
+		dest=int(input('Where to: 1) POPLE 2) AL 3) Dropbox\n'))
+		break
+	except ValueError:
+		print("Oops!  That was no valid number.  Try again...")
+
+
+if dest==1 or dest==2:
+	target_dir=remote_user+'@'+remote_host[dest-1]+':'+ remote_dir +'/'
+else:
+	target_dir='/Users/bing/Dropbox/backup/'
+		
+if len(sys.argv) < 2:
+	src = input("Enter the name of file or directory you want to transfer:")
+	check(src)
+	sync(src,target_dir)
+else:
+	for arg in sys.argv[1:]:
+		check(arg)
+		sync(arg,target_dir)
+
+# End lof file
+t2 = time.time()
+log.write("Ending script at %s\n" % time.strftime("%m/%d/%Y %H:%M:%S"))
+log.write("Time to run script: %s seconds\n" % (t2-t1))
+log.write("*************The End.*******************\n")
+log.close()
+
+# If you are using Windows, use source = [r'C:\Documents', r'D:\Work'] or something like that

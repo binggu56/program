@@ -1,0 +1,47 @@
+#!/usr/bin/python
+# Filename: backup_v4
+import time,os,sys
+
+def check(dir):
+	"check if the file exist."
+
+	"Or not."
+	if not os.path.exists(dir):
+		sys.exit('The file does not exist.')
+	else:
+		print("%s will be backuped." %(dir))
+
+def backup(source):
+	while True:
+		try:
+			dest=int(input('Where to backup: 1) POPLE 2) Dropbox\n'))
+			break
+		except ValueError:
+			print("Oops!  That was no valid number.  Try again...")
+
+	if dest==1:
+		target_dir = '/home/bing/backup/' 
+		target=target_dir+time.strftime('%Y%m%d') + '.tar.gz'
+		command='tar zcvpf - %s | ssh bing@pople.psc.sc.edu "cat > %s"' %(source,target)
+		if os.system(command) == 0:
+			print('Successful backup to', target_dir)
+		else:
+			print('Backup failed.')
+	elif dest==2:
+		target_dir = '/Users/bing/Dropbox/backup/'
+		target=target_dir+time.strftime('%Y%m%d') + '.tar.gz'
+		command = 'tar -cvzf %s %s'%(target,source)
+		if os.system(command) == 0:
+			print("Successful")
+		else:
+			print('Backup failed.')
+	else:
+		print("Bad choice.")
+		sys.exit()
+
+for arg in sys.argv[1:]:
+	check(arg)
+	backup(arg)
+#source = sys.argv[1]
+
+# If you are using Windows, use source = [r'C:\Documents', r'D:\Work'] or something like that

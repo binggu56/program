@@ -1,0 +1,8 @@
+(|SYSTEM|::|VERSION| '(20080430.))
+#0Y_ #0Y |CHARSET|::|UTF-8|
+#Y(#:|1 1 "Defun hello () print((list 'hello 'world)))"-1|
+   #13Y(00 00 00 00 00 00 00 00 20 01 C5 19 01)
+   ("Defun hello () print((list 'hello 'world)))") |COMMON-LISP|::|NIL|)
+#Y(#:|3 3 (PRINT "hello world")-2|
+   #17Y(00 00 00 00 00 00 00 00 20 01 DA 38 01 31 8E 19 01) ("hello world")
+   (|COMMON-LISP|::|T| |COMMON-LISP|::|T| |COMMON-LISP|::|T|))

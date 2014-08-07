@@ -1,0 +1,23 @@
+#!/usr/bin/python
+# Filename: helloworld.py
+import sys
+import os
+import numpy as np
+
+lists = ['hello','world']
+print(lists[0+1]+'@')
+def main(argv):
+    if len(argv) < 2:
+        sys.stderr.write("Usage: %s <database>\n" % (argv[0],))
+        return 1
+
+    if not os.path.exists(argv[1]):
+        sys.stderr.write("ERROR: Database %r was not found!\n" % (argv[1],))
+        return 1
+if 'Darwin' in os.popen('uname'):
+	print("Macbook.")
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
+
+d = 2**38
+print(d)
